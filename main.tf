@@ -1,0 +1,25 @@
+locals {
+  # Documentation: https://www.terraform.io/docs/language/expressions/types.html#maps-objects
+  map1 = {
+    item1 = {
+      name1 = "item1value1"
+      name2 = "item1value2"
+    }
+    item2 = {
+      name1 = "item2value1"
+      name2 = "item2value2"
+    }
+  }
+}
+
+resource "null_resource" "changeme_null_resource_foreach" {
+  for_each = local.map1
+  provisioner "local-exec" {
+    command = "echo ${each.key} ${each.value.name1} ${each.value.name2}"
+  }
+}
+
+resource "local_file" "newFile" {
+  content  = var.text
+  filename = "${path.module}/${var.fileName}"
+}
